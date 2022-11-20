@@ -60,11 +60,14 @@ function App() {
   }, []);
 
   return (
-    <div>
-      G10 GPA Calculator
+    <div className='container md:mx-auto h-screen'>
+      <h1 className='text-3xl text-blue-700'>G10 GPA Calculator</h1>
       <br></br>
-      Your estimated GPA is {GlobGPA}
-      <div className='ag-theme-alpine' style={{height: 400, width: 1000}}>
+      {GlobGPA?
+        <span>Your estimated GPA is: {GlobGPA}</span>  
+      :<span>Enter any of your scores to get an estimated GPA.</span>}
+      
+      <div className='ag-theme-alpine flex-auto h-3/4'>
         <AgGridReact
           columnDefs={columnDefs}
           rowData={data}
