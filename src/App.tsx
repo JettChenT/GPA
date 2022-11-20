@@ -1,81 +1,56 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import './App.css'
-import { getGrade, Levels, LevelToGrade, LetterGrades, Course, defaultCourses, updateCourse, calcGPA} from './gradecalc'
+import { getGrade, Levels, LevelToGrade, LetterGrades, Course, defaultCourses, updateCourse, calcGPA, getRandCourses} from './gradecalc'
 import { AgGridReact } from 'ag-grid-react';
 
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import { TabToNextCellParams, CellPosition, CellPositionUtils } from 'ag-grid-community';
 
+import { gradeClassRules, cellClassRules, totClassRules } from './styling';
+
+import "@sjmc11/tourguidejs/src/scss/tour.scss" // Styles
+import {TourGuideClient} from "@sjmc11/tourguidejs/src/Tour" // JS
+import steps from './steps';
+
 const numberParser = (params: { newValue: any }) => {
   const num = params.newValue?Number(params.newValue):NaN;
   return isNaN(num) ? null : num;
 }
 
-const cellClassRules = {
-  'bg-green-300/50': (params: { value: number }) => getGrade(params.value) === 0,
-  'bg-green-200/50': (params: { value: number }) => getGrade(params.value) === 1,
-  'bg-green-100/50': (params: { value: number }) => getGrade(params.value) === 2,
-  'bg-yellow-100/50': (params: { value: number }) => getGrade(params.value) === 3,
-  'bg-yellow-200/50': (params: { value: number }) => getGrade(params.value) === 4,
-  'bg-yellow-300/50': (params: { value: number }) => getGrade(params.value) === 5,
-  'bg-red-200/50': (params: { value: number }) => getGrade(params.value) === 6,
-  'bg-red-300/50': (params: { value: number }) => getGrade(params.value) === 7,
-  'bg-red-400/50': (params: { value: number }) => getGrade(params.value) === 8,
-  'bg-slate-200/50': (params: { value: any }) => getGrade(params.value) === null,
-}
-
-const totClassRules = {
-  'bg-green-300/50': (params: { value: number }) => getGrade(params.value) === 0,
-  'bg-green-200/50': (params: { value: number }) => getGrade(params.value) === 1,
-  'bg-green-100/50': (params: { value: number }) => getGrade(params.value) === 2,
-  'bg-yellow-100/50': (params: { value: number }) => getGrade(params.value) === 3,
-  'bg-yellow-200/50': (params: { value: number }) => getGrade(params.value) === 4,
-  'bg-yellow-300/50': (params: { value: number }) => getGrade(params.value) === 5,
-  'bg-red-200/50': (params: { value: number }) => getGrade(params.value) === 6,
-  'bg-red-300/50': (params: { value: number }) => getGrade(params.value) === 7,
-  'bg-red-400/50': (params: { value: number }) => getGrade(params.value) === 8,
-}
-
-const gradeClassRules = {
-  'bg-green-300/50': (params: { value: any}) => params.value === 'A+',
-  'bg-green-200/50': (params: { value: any}) => params.value === 'A',
-  'bg-green-100/50': (params: { value: any}) => params.value === 'A-',
-  'bg-yellow-100/50': (params: { value:any}) => params.value === 'B+',
-  'bg-yellow-200/50': (params: { value:any}) => params.value === 'B',
-  'bg-yellow-300/50': (params: { value:any}) => params.value === 'B-',
-  'bg-red-200/50': (params: { value: any}) => params.value === 'C',
-  'bg-red-300/50': (params: { value: any}) => params.value === 'D',
-  'bg-red-400/50': (params: { value: any}) => params.value === 'F',
-}
-
+const tg = new TourGuideClient({
+  steps:steps,
+  backdropColor: "rgba(0,0,0,0.25)",
+});
 
 function App() {
   // const table = useReactTable()
 
   let [data, setData] = useState(defaultCourses)
   let [GlobGPA, setGlobGPA] = useState(calcGPA(data))
+  const gridRef = useRef<any>()
+
 
   const [columnDefs] = useState([
-    { field: 'name', editable:true},
-    { field: 'level', editable:true, cellEditor: 'agSelectCellEditor', cellEditorParams: { values: ['S', 'H-', 'H', 'AH', 'AP'] } },
-    { field: 'weight'},
-    { field: 'term', editable:true, valueParser: numberParser, cellClassRules: cellClassRules},
-    { field: 'midterm', editable:true, valueParser: numberParser, cellClassRules: cellClassRules},
-    { field: 'final' , editable:true, valueParser: numberParser, cellClassRules: cellClassRules},
+    { field: 'name', editable:true, headerClass:'courses'},
+    { field: 'level', editable:true, cellEditor: 'agSelectCellEditor', cellEditorParams: { values: ['S', 'H-', 'H', 'AH', 'AP'] }, headerClass:'levels'},
+    { field: 'weight', headerClass:'weights'},
+    { field: 'term', editable:true, valueParser: numberParser, cellClassRules: cellClassRules, headerClass:'grades'},
+    { field: 'midterm', editable:true, valueParser: numberParser, cellClassRules: cellClassRules, headerClass:'grades'},
+    { field: 'final' , editable:true, valueParser: numberParser, cellClassRules: cellClassRules, headerClass:'grades'},
     { field: 'overall', valueGetter: (params: any) => {
       const newCourse = updateCourse(params.data);
       return newCourse.overall;
-    }, cellClassRules: totClassRules},
+    }, cellClassRules: totClassRules, headerClass:'overall'},
     { field: 'letter', valueGetter: (params: any) => {
       const newCourse = updateCourse(params.data);
       return newCourse.letter;
-    }, cellClassRules: gradeClassRules},
+    }, cellClassRules: gradeClassRules, headerClass:'letter'},
     { field: 'GPA', valueGetter: (params: any) => {
       const newCourse = updateCourse(params.data);
       return newCourse.GPA;
-    }},
+    }, headerClass:'gpacol'},
   ])
 
   const colDef = useMemo(() => ({
@@ -85,7 +60,6 @@ function App() {
     singleClickEdit: true,
     // editable: true,
   }), [])
-
   const onCellValueChanged = useCallback((event: { data: Course, rowIndex: number |null }) => {
     let newdat = updateCourse(event.data);
     event.data = newdat;
@@ -98,15 +72,26 @@ function App() {
     console.log(data);
   }, []);
 
+  useEffect(() => {
+    tg.onAfterExit(() => {
+      setData(defaultCourses);
+      console.log('Exiting...')
+      console.log(defaultCourses);
+      setGlobGPA(null);
+      gridRef.current.api.refreshCells();
+    });
+  }, []);
   return (
     <div className='container md:mx-auto h-screen'>
-      <h1 className='text-3xl font-bold text-blue-700 mb-5'>G10 GPA Calculator</h1>
-      {GlobGPA?
-        <span>Your estimated GPA is: <span className='text-blue-700'>{GlobGPA}</span></span>  
-      :<span>Enter any of your scores to get an estimated GPA.</span>}
+      <h1 className='text-3xl font-bold text-blue-700 mb-5' id='title'>GPA Calculator</h1>
+      <div id='result'>Your estimated GPA is: {" "}
+         <span className='text-blue-700'>{GlobGPA}</span>
+      </div>
+      <br/>
       
-      <div className='ag-theme-alpine flex-auto h-3/4'>
+      <div className='ag-theme-alpine flex-auto h-3/5 mt-4'>
         <AgGridReact
+          ref={gridRef}
           columnDefs={columnDefs}
           rowData={data}
           defaultColDef={colDef}
@@ -120,6 +105,16 @@ function App() {
         >
         </AgGridReact>
       </div>
+      <button 
+        onClick={() => {
+          let dat = getRandCourses();
+          setData(dat);
+          gridRef.current.api.refreshCells();
+          setGlobGPA(calcGPA(dat));
+          tg.start();
+        }}
+        className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-4'
+      >Tutorial</button>
     </div>
   )
 }

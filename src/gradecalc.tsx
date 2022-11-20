@@ -42,14 +42,14 @@ export type Course = {
 
 function updateCourse(course: Course): Course {
     // Calculate the GPA for a course
-    console.log('updateCourse')
+    // console.log('updateCourse')
     let totgrade = 0.3*(course.midterm??0) + 0.3*(course.term??0) + 0.4*(course.final??0);
     let totcred = ((course.midterm&&0.3)??0) + ((course.term&&0.3)??0) + ((course.final&&0.4)??0);
     let ovearll = totcred==0?null:totgrade/totcred;
     let letGrade = ovearll==null?null:getGrade(ovearll);
     let GPA = letGrade==null?null:LevelToGrade[course.level][letGrade];
     let letter = letGrade==null?null:LetterGrades[letGrade];
-    console.log(ovearll, letGrade, GPA, letter)
+    // console.log(ovearll, letGrade, GPA, letter)
     return {
         ...course,
         overall: ovearll,
@@ -75,12 +75,14 @@ function initCourse(name: string, level: Levels, weight: number): Course{
 const calcGPA = (courses: Course[]) => {
     let totGPA = 0;
     let totWeight = 0;
+    console.log(courses)
     for (let course of courses) {
         if (course.GPA!=null) {
             totGPA += course.GPA*course.weight;
             totWeight += course.weight;
         }
     }
+    console.log(totGPA, totWeight)
     return totWeight==0?null:totGPA/totWeight;
 }
 
@@ -94,4 +96,21 @@ const defaultCourses: Course[] = [
     initCourse('Elective', Levels.Standard, 3),
 ]
 
-export { LetterGrades, getGrade, Levels, LevelToGrade, defaultCourses, updateCourse, calcGPA }
+const genScore = () => {
+  // generate random score between 70 and 100
+  return Math.floor(Math.random() * 30) + 70;
+}
+
+const getRandCourses = () => {
+    let nwcourses: Course[] = structuredClone(defaultCourses);
+    // enumerate indices of courses
+    for (let i=0; i<nwcourses.length; i++) {
+      nwcourses[i].midterm = genScore();
+      nwcourses[i].final = genScore();
+      nwcourses[i].term = genScore();
+      nwcourses[i] = updateCourse(nwcourses[i]);
+    }
+    return nwcourses;
+}
+
+export { LetterGrades, getGrade, Levels, LevelToGrade, defaultCourses, updateCourse, calcGPA, getRandCourses }
