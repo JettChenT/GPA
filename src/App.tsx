@@ -1,43 +1,78 @@
-import { useState } from 'react'
-import logo from './logo.svg'
+import { useCallback, useMemo, useState } from 'react'
+import reactLogo from './assets/react.svg'
 import './App.css'
+import { getGrade, Levels, LevelToGrade, LetterGrades, Course, defaultCourses, updateCourse, calcGPA} from './gradecalc'
+import { AgGridReact } from 'ag-grid-react';
+
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-alpine.css';
+
+const numberParser = (params: { newValue: any }) => {
+  const num = params.newValue?Number(params.newValue):NaN;
+  return isNaN(num) ? null : num;
+}
 
 function App() {
-  const [count, setCount] = useState(0)
+  // const table = useReactTable()
+
+  let [data, setData] = useState(defaultCourses)
+  let [GlobGPA, setGlobGPA] = useState(calcGPA(data))
+
+  const [columnDefs] = useState([
+    { field: 'name', editable:true},
+    { field: 'level', editable:true, cellEditor: 'agSelectCellEditor', cellEditorParams: { values: ['S', 'H-', 'H', 'AH', 'AP'] } },
+    { field: 'weight'},
+    { field: 'term', editable:true, valueParser: numberParser},
+    { field: 'midterm', editable:true, valueParser: numberParser},
+    { field: 'final' , editable:true, valueParser: numberParser},
+    { field: 'overall', valueGetter: (params: any) => {
+      const newCourse = updateCourse(params.data);
+      return newCourse.overall;
+    }},
+    { field: 'letter', valueGetter: (params: any) => {
+      const newCourse = updateCourse(params.data);
+      return newCourse.letter;
+    }},
+    { field: 'GPA', valueGetter: (params: any) => {
+      const newCourse = updateCourse(params.data);
+      return newCourse.GPA;
+    }},
+  ])
+
+  const colDef = useMemo(() => ({
+    flex: 1,
+    sortable: true,
+    resizable: true,
+    singleClickEdit: true,
+    // editable: true,
+  }), [])
+
+  const onCellValueChanged = useCallback((event: { data: Course, rowIndex: number |null }) => {
+    let newdat = updateCourse(event.data);
+    event.data = newdat;
+    console.log(event.rowIndex);
+    if (event.rowIndex!=null) {
+      data[event.rowIndex] = newdat;
+      setData(data);
+      setGlobGPA(calcGPA(data));
+    }
+    console.log(data);
+  }, []);
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
-        <p>
-          <button type="button" onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          Edit <code>App.tsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {' | '}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
-      </header>
+    <div>
+      G10 GPA Calculator
+      <br></br>
+      Your estimated GPA is {GlobGPA}
+      <div className='ag-theme-alpine' style={{height: 400, width: 1000}}>
+        <AgGridReact
+          columnDefs={columnDefs}
+          rowData={data}
+          defaultColDef={colDef}
+          onCellValueChanged={onCellValueChanged}
+        >
+        </AgGridReact>
+      </div>
     </div>
   )
 }
