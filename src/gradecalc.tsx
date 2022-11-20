@@ -1,8 +1,9 @@
 const LetterGrades = ['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C', 'D', 'F']
-const lbounds = [97,92,87,82,77,81,70,76,65,60,0]
+const lbounds = [97,92,87,82,77,70,65,60,0]
 
-const getGrade = (score: number) => {
+const getGrade = (score: number|null) => {
   // Returns the index of the grade
+  if(score==null)return null;
   for (let i = 0; i < lbounds.length; i++) {
     if (score >= lbounds[i]) {
       return i
