@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import './App.css'
-import { getGrade, Levels, LevelToGrade, LetterGrades, Course, defaultCourses, updateCourse, calcGPA, getRandCourses} from './gradecalc'
+import { getGrade, Levels, LevelToGrade, LetterGrades, Course, defaultCourses, updateCourse, calcGPA, getRandCourses, initCourse} from './gradecalc'
 import { AgGridReact } from 'ag-grid-react';
 
 import 'ag-grid-community/styles/ag-grid.css';
@@ -33,9 +33,9 @@ function App() {
 
 
   const [columnDefs] = useState([
-    { field: 'name', editable:true, headerClass:'courses'},
+    { field: 'name', editable:true, headerClass:'courses', rowDrag:true},
     { field: 'level', editable:true, cellEditor: 'agSelectCellEditor', cellEditorParams: { values: ['S', 'H-', 'H', 'AH', 'AP'] }, headerClass:'levels'},
-    { field: 'weight', headerClass:'weights'},
+    { field: 'weight', headerClass:'weights', editable:true, valueParser: numberParser},
     { field: 'term', editable:true, valueParser: numberParser, cellClassRules: cellClassRules, headerClass:'grades'},
     { field: 'midterm', editable:true, valueParser: numberParser, cellClassRules: cellClassRules, headerClass:'grades'},
     { field: 'final' , editable:true, valueParser: numberParser, cellClassRules: cellClassRules, headerClass:'grades'},
@@ -89,32 +89,52 @@ function App() {
       </div>
       <br/>
       
-      <div className='ag-theme-alpine flex-auto h-3/5 mt-4'>
+      <div className='ag-theme-alpine flex-auto h-2/3 mt-2'>
         <AgGridReact
           ref={gridRef}
           columnDefs={columnDefs}
           rowData={data}
           defaultColDef={colDef}
           onCellValueChanged={onCellValueChanged}
+          rowDragManaged={true}
           tabToNextCell={(params: TabToNextCellParams) =>  {
             return {
               ...params.previousCellPosition,
-              rowIndex: params.previousCellPosition.rowIndex + 1,
+              rowIndex: Math.min(params.previousCellPosition.rowIndex + 1, params.api.getDisplayedRowCount()-1),
             }
-          }}
+          }
+        }
         >
         </AgGridReact>
       </div>
-      <button 
-        onClick={() => {
-          let dat = getRandCourses();
-          setData(dat);
-          gridRef.current.api.refreshCells();
-          setGlobGPA(calcGPA(dat));
-          tg.start();
-        }}
-        className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-4'
-      >Tutorial</button>
+      <div className='space-x-2'>
+        <button
+          className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-4'
+          onClick={() => {
+            let nwcourse = initCourse('Course', Levels.Standard, 1);
+            setData(data)
+            console.log(data)
+            // gridRef.current.api.refreshCells();
+            gridRef.current.api.redrawRows();
+            gridRef.current.api.updateRowData({
+              add: [nwcourse],
+              addIndex: data.length
+            })
+          }}
+        >
+          Add Course
+        </button>
+        <button 
+          onClick={() => {
+            let dat = getRandCourses();
+            setData(dat);
+            gridRef.current.api.updateRowData({})
+            setGlobGPA(calcGPA(dat));
+            tg.start();
+          }}
+          className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-4'
+        >Tutorial</button>
+      </div>
     </div>
   )
 }

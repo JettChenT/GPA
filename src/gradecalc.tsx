@@ -87,12 +87,12 @@ const calcGPA = (courses: Course[]) => {
 }
 
 const defaultCourses: Course[] = [
-    initCourse('Math', Levels.Standard, 5),
+    initCourse('Math', Levels.Honor, 5),
     initCourse('Language', Levels.Honor, 5),
     initCourse('Literature', Levels.Honor, 5),
     initCourse('AP1', Levels.AP, 5),
     initCourse('AP2', Levels.AP, 5),
-    initCourse('Chinese', Levels.Standard, 3),
+    initCourse('Chinese', Levels.Honor, 3),
     initCourse('Elective', Levels.Standard, 3),
 ]
 
@@ -113,4 +113,4 @@ const getRandCourses = () => {
     return nwcourses;
 }
 
-export { LetterGrades, getGrade, Levels, LevelToGrade, defaultCourses, updateCourse, calcGPA, getRandCourses }
+export { LetterGrades, getGrade, Levels, LevelToGrade, defaultCourses, updateCourse, calcGPA, getRandCourses, initCourse }
