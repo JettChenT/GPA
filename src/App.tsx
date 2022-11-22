@@ -180,7 +180,7 @@ function App() {
         Your estimated GPA is: {" "}
           {GlobGPA?
             <span className="text-blue-600">{GlobGPA.toFixed(3)}</span>
-            :<span className="text-gray-500">Enter any of your scores to get an estmate</span>
+            :<span className="text-gray-500">Enter any of your scores to get an estimate</span>
           }
       </div>
       <br />
