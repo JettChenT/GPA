@@ -53,7 +53,7 @@ function App() {
   const [searchParams] = useSearchParams();
   let [data, setData] = useState(
     window.location.hash
-      ? (importFromCSV(window.location.hash.substring(1) ?? "").data as any)
+      ? (importFromCSV(window.decodeURIComponent(window.location.hash.substring(1)) ?? "").data as any)
       : defaultCourses
   );
   console.log(window.location.hash);
