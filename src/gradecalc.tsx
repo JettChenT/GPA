@@ -1,3 +1,5 @@
+import {unpack, pack} from 'msgpackr'
+import {parse, unparse} from 'papaparse'
 const LetterGrades = ['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C', 'D', 'F']
 const lbounds = [97,92,87,82,77,70,65,60,0]
 
@@ -113,4 +115,20 @@ const getRandCourses = () => {
     return nwcourses;
 }
 
-export { LetterGrades, getGrade, Levels, LevelToGrade, defaultCourses, updateCourse, calcGPA, getRandCourses, initCourse }
+const exportToCSV= (dat: Course[]) => {
+  const ret = window.btoa(unparse(dat));
+  return ret;
+}
+
+const importFromCSV = (csvData: string) => {
+  const ret = parse(window.atob(csvData), {header:true, dynamicTyping:true});
+  return ret
+}
+
+function importFromJson(jsonData: string):Course[] {
+  let data = JSON.parse(jsonData);
+  return data;
+}
+
+
+export { LetterGrades, getGrade, Levels, LevelToGrade, defaultCourses, updateCourse, calcGPA, getRandCourses, initCourse, importFromJson, exportToCSV, importFromCSV}

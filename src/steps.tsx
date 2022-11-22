@@ -42,6 +42,16 @@ const steps = [
     title: "Final GPA",
     content: "Enter any of your scores and the final GPA will be computed for you here.",
     target: '#result',
+  },
+  {
+    title: "Add a Course",
+    content: "Click here to add a new course.",
+    target: "#addcourse",
+  },
+  {
+    title: "Share",
+    content: "Click here to share a link to your GPA with others. Note: Your data will *not* be stored on any servers.",
+    target: "#sharebtn",
   }
 ];
 
