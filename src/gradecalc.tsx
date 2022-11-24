@@ -1,7 +1,6 @@
-import {unpack, pack} from 'msgpackr'
 import {parse, unparse} from 'papaparse'
 const LetterGrades = ['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C', 'D', 'F']
-const lbounds = [97,92,87,82,77,70,65,60,0]
+const lbounds = [96.5,91.5,86.5,81.5,76.5,69.5,64.5,59.5,0]
 
 const getGrade = (score: number|null) => {
   // Returns the index of the grade
