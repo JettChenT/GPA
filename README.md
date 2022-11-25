@@ -1,29 +1,16 @@
----
-title: Vite React (TS)
-description: Example Vite app that is configured with React and Typescipt
-tags:
-  - vite
-  - react
-  - typescript
----
+# SSBS GPA Calculator
 
-# Vite + React + Typescript Example
-This example utilises vite for static site generation
+This is a tool that helps you estimate your GPA score at SSBS.
 
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template/duzltn?referralCode=OH27A5)
+The source code of this tool is contained in this repository. Feel free to check it out and contribute!
 
-## ✨ Features
+## Privacy
+Our server does not store any information/statistics regarding your gpa score.
+When you share your GPA score with other via an url, all the data related to your GPA data is stored in the URL itself, 
+hence why the shared URL is so long.
 
-- Vite
-- React
-- TypeScript
+To estimate the amount of resources to be spent on maintaining this, we keep track of the amount of visitors to our website.
+You can view the data (here)[https://analytics.ssbs.club/share/xcOczTBw/GPA]. Now you have as much information as we do :)
 
-## 💁‍♀️ How to use
-
-- Install dependencies `yarn`
-- Connect to your Railway project `railway link`
-- Start the development server `railway run yarn dev`
-
-## 📝 Notes
-
-The project is directly derived from the standard creation with some extra configuration to make sure it is quick and easy to get started on hosting your next site with railway. 
+## Mobile version
+The mobile version(a miniprogram on wechat) is coming soon!
