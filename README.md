@@ -10,7 +10,10 @@ When you share your GPA score with other via an url, all the data related to you
 hence why the shared URL is so long.
 
 To estimate the amount of resources to be spent on maintaining this, we keep track of the amount of visitors to our website.
-You can view the data (here)[https://analytics.ssbs.club/share/xcOczTBw/GPA]. Now you have as much information as we do :)
+You can view the data [here](https://analytics.ssbs.club/share/xcOczTBw/GPA). Now you have as much information as we do :)
 
 ## Mobile version
 The mobile version(a miniprogram on wechat) is coming soon!
+
+## Calculation method
+TBD
