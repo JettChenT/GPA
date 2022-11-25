@@ -166,7 +166,7 @@ function App() {
       setData(defaultCourses);
       console.log("Exiting...");
       console.log(defaultCourses);
-      setGlobGPA(null);
+      setGlobGPA(calcGPA(data));
       gridRef.current.api.refreshCells();
     });
   }, []);
@@ -178,7 +178,7 @@ function App() {
       <span className="text-gray-500 md:hidden">Note: use a computer for a better experience</span>
       <div id="result">
         Your estimated GPA is: {" "}
-          {GlobGPA?
+          {GlobGPA!=null?
             <span className="text-blue-600">{GlobGPA.toFixed(3)}</span>
             :<span className="text-gray-500">Enter any of your scores to get an estimate</span>
           }
