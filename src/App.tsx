@@ -249,6 +249,8 @@ function App() {
           <AcademicCapIcon className="w-5 h-5 inline-block mr-2"/>
           Tutorial
         </button>
+        <br/>
+        <a className="text-blue-600 underline" href="https://github.com/JettChenT/GPA/blob/main/README.md">About this tool</a>
       </div>
     </div>
   );
