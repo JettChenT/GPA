@@ -175,7 +175,7 @@ function App() {
       <h1 className="text-3xl font-bold text-blue-700 mb-5 mt-3" id="title">
         GPA Calculator
       </h1>
-      <span className="text-gray-500 md:hidden">Note: use a computer for a better experience</span>
+      <span className="text-gray-500 md:hidden">Note: use a computer for a better experience, mobile version(miniprogram) coming soon!</span>
       <div id="result">
         Your estimated GPA is: {" "}
           {GlobGPA!=null?

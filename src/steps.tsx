@@ -6,7 +6,13 @@ const steps = [
   },
   {
     title: "Courses",
-    content: "Here are the names to all of your courses, click on them to customize their name.",
+    content: `
+      Here are all of yoru courses. 
+      Click on them to customize their name.
+      <br/>
+      Note that Chinese course names are currently not compatible with sharing.
+      `
+    ,
     target: ".courses",
   },
   {
