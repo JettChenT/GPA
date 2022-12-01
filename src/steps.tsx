@@ -7,17 +7,15 @@ const steps = [
   {
     title: "Courses",
     content: `
-      Here are all of yoru courses. 
+      Here are all of your courses. 
       Click on them to customize their name.
-      <br/>
-      Note that Chinese course names are currently not compatible with sharing.
       `
     ,
     target: ".courses",
   },
   {
     title: "Enter Your Level",
-    content: "The levels are the different classes you can take. Each level has a different GPA value. Click on a cell in this column to customize your level for each course.",
+    content: "Click on a cell in this column to customize your level for each course.",
     target: ".levels",
   },
   {
@@ -27,21 +25,19 @@ const steps = [
   },
   {
     title: "Overall",
-    content: `The Overall column shows your overall grade for each course. 
-        This is equal to 0.3*Termscore+0.3*Midterm+0.4*Final. 
-        If you have not entered a grade for a course, the overall grade will be estimated based on existing grades.
-        For example, a Midterm of 80 and a Final of 90 without a termscore would result in an overall grade of (0.3*80+0.4*90)/(0.3+0.4) = 85.71
+    content: `The Overall column shows the overall grade for each course, which is
+      calculated as the weighted average of each score you entered
     `,
     target: ".overall",
   },
   {
     title: "Letter",
-    content: "The Letter column shows the letter grade for each course computed from the overall grade.",
+    content: "This column shows the corresponding letter grade.",
     target: ".letter",
   },
   {
     title: "GPA",
-    content: "The GPA column shows the GPA value for each course derived from its letter grade",
+    content: "This column shows the GPA score calculated for each course.",
     target: ".gpacol",
     },
   {
@@ -56,8 +52,13 @@ const steps = [
   },
   {
     title: "Share",
-    content: "Click here to share a link to your GPA with others. Note: Your data will *not* be stored on any servers.",
+    content: "Click here to share a link to your GPA with others.",
     target: "#sharebtn",
+  },
+  {
+    title: "About",
+    content: "Go to this page for more information regarding this tool(eg. calculation mechanics, privacy protection...)",
+    target: "#aboutpage"
   }
 ];
 

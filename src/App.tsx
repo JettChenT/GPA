@@ -250,7 +250,7 @@ function App() {
           Tutorial
         </button>
         <br/>
-        <a className="text-blue-600 underline" href="https://github.com/JettChenT/GPA/blob/main/README.md">About this tool</a>
+        <a id="aboutpage" className="text-blue-600 underline" href="https://github.com/JettChenT/GPA/blob/main/README.md">About this tool</a>
       </div>
     </div>
   );
