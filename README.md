@@ -39,7 +39,7 @@ The overall score is then calculated as the [weighted average](https://en.wikipe
 of the entered Term Score, Midterm, Finals.
 
 For example, if you only entered your Midterms and Finals, respectively 84 and 89, your overall grade would be
-$\frac{84+89}{0.3+0.4} = 86.857$
+$\frac{84\times 0.3+89\times 0.3}{0.3+0.4} = 86.857$
 
 ### Step 2: GPA for each course
 Your GPA for each course will be calculated
@@ -67,4 +67,4 @@ Example:
 
 Your final GPA would be calculated as:
 
-$$\frac{4.2*5+4.4*5+3.5*3+3.3*0.5}{5+5+3+0.5} = 4.085$$
+$$\frac{4.2\times5+4.4\times5+3.5\times3+3.3\times0.5}{5+5+3+0.5} = 4.085$$
