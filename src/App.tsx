@@ -32,7 +32,7 @@ import { TourGuideClient } from "@sjmc11/tourguidejs/src/Tour"; // JS
 import steps from "./steps";
 
 import { useSearchParams } from "react-router-dom";
-import {AcademicCapIcon, ShareIcon, PlusCircleIcon} from "@heroicons/react/24/outline"
+import {AcademicCapIcon, ShareIcon, PlusCircleIcon, MinusCircleIcon} from "@heroicons/react/24/outline"
 
 const numberParser = (params: { newValue: any }) => {
   const num = params.newValue ? Number(params.newValue) : NaN;
@@ -62,7 +62,7 @@ function App() {
   const gridRef = useRef<any>();
 
   const [columnDefs] = useState([
-    { field: "name", editable: true, headerClass: "courses", rowDrag: true, minWidth: 120 },
+    { field: "name", editable: true, headerClass: "courses", rowDrag: true, singleClickEdit: false,minWidth: 120 },
     {
       field: "level",
       editable: true,
@@ -193,15 +193,15 @@ function App() {
           defaultColDef={colDef}
           onCellValueChanged={onCellValueChanged}
           rowDragManaged={true}
+          stopEditingWhenCellsLoseFocus={true}
           tabToNextCell={(params: TabToNextCellParams) => {
+            var newind = params.previousCellPosition.rowIndex + (params.backwards ? -1 : 1);
+            if(newind<0){newind=0}
+            if(newind>=data.length){newind=data.length-1}
             return {
               ...params.previousCellPosition,
-              rowIndex: Math.min(
-                params.previousCellPosition.rowIndex + 1,
-                params.api.getDisplayedRowCount() - 1
-              ),
-            };
-          }}
+              rowIndex: newind
+          }}}
         ></AgGridReact>
       </div>
       <div className="space-x-2">
@@ -209,10 +209,11 @@ function App() {
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-4"
           onClick={() => {
             let nwcourse = initCourse("Course", Levels.Standard, 1);
+            data.push(nwcourse);
             setData(data);
             console.log(data);
             gridRef.current.api.redrawRows();
-            gridRef.current.api.updateRowData({
+            gridRef.current.api.applyTransaction({
               add: [nwcourse],
               addIndex: data.length,
             });
@@ -221,6 +222,22 @@ function App() {
         >
           <PlusCircleIcon className="w-5 h-5 inline-block mr-2"/>
           Add Course
+        </button>
+        <button
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-4" 
+          onClick={() => {
+            const selected = gridRef.current.api.getFocusedCell();
+            console.log(selected)
+            data.splice(selected.rowIndex, 1);
+            setData(data);
+            console.log(data);
+            gridRef.current.api.redrawRows();
+            gridRef.current.api.setRowData(data);
+            setGlobGPA(calcGPA(data));
+          }}
+        >
+          <MinusCircleIcon className="w-5 h-5 inline-block mr-2"/>
+          Delete Course
         </button>
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-4"
