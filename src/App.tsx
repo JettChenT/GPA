@@ -268,6 +268,8 @@ function App() {
         </button>
         <br/>
         <a id="aboutpage" className="text-blue-600 underline" href="https://github.com/JettChenT/GPA/blob/main/README.md">About this tool</a>
+        {" "}
+        <a className="text-blue-600 underline" href="https://www.bilibili.com/video/BV1L44y1U74Q/">Demo</a>
       </div>
     </div>
   );
