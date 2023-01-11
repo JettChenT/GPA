@@ -17,9 +17,11 @@
     "ag-grid-react": "^28.2.1",
     "autoprefixer": "^10.4.13",
     "base65536": "^4.0.2",
+    "daisyui": "^2.46.1",
     "msgpackr": "^1.8.0",
     "papaparse": "^5.3.2",
     "react": "^18.0.0",
+    "react-daisyui": "^3.0.2",
     "react-dom": "^18.0.0",
     "react-router-dom": "^6.4.3",
     "tailwindcss": "^3.2.4"

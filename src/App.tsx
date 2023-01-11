@@ -26,6 +26,7 @@ import {
 } from "ag-grid-community";
 
 import { gradeClassRules, cellClassRules, totClassRules } from "./styling";
+import MobilePopup from "./MobilePopup";
 
 import "@sjmc11/tourguidejs/src/scss/tour.scss"; // Styles
 import { TourGuideClient } from "@sjmc11/tourguidejs/src/Tour"; // JS
@@ -33,6 +34,8 @@ import steps from "./steps";
 
 import { useSearchParams } from "react-router-dom";
 import {AcademicCapIcon, ShareIcon, PlusCircleIcon, MinusCircleIcon} from "@heroicons/react/24/outline"
+
+import { Footer } from "react-daisyui";
 
 const numberParser = (params: { newValue: any }) => {
   const num = params.newValue ? Number(params.newValue) : NaN;
@@ -172,20 +175,24 @@ function App() {
   }, []);
   return (
     <div className="container md:mx-auto h-screen">
-      <h1 className="text-3xl font-bold text-blue-700 mb-5 mt-3" id="title">
+      <h1 className="text-3xl font-bold text-primary mb-5 mt-3" id="title">
         GPA Calculator
       </h1>
-      <span className="text-gray-500 md:hidden">Note: use a computer for a better experience, mobile version(miniprogram) coming soon!</span>
+      <span className="text-neutral md:hidden">This is optimized for PCs, but here's the {" "}
+        <span className="text-primary">
+          <MobilePopup/>
+        </span>
+      </span>
       <div id="result">
         Your estimated GPA is: {" "}
           {GlobGPA!=null?
-            <span className="text-blue-600">{GlobGPA.toFixed(3)}</span>
-            :<span className="text-gray-500">Enter any of your scores to get an estimate</span>
+            <span className="text-primary">{GlobGPA.toFixed(3)}</span>
+            :<span className="text-gray-400">Enter any of your scores to get an estimate</span>
           }
       </div>
       <br />
 
-      <div className="ag-theme-alpine flex-auto h-2/3 mt-2">
+      <div className="ag-theme-alpine flex-auto h-2/3 my-2">
         <AgGridReact
           ref={gridRef}
           columnDefs={columnDefs}
@@ -206,7 +213,7 @@ function App() {
       </div>
       <div className="space-x-2">
         <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-4"
+          className="btn btn-primary"
           onClick={() => {
             let nwcourse = initCourse("Course", Levels.Standard, 1);
             data.push(nwcourse);
@@ -224,7 +231,7 @@ function App() {
           Add Course
         </button>
         <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-4" 
+          className="btn btn-primary" 
           onClick={() => {
             const selected = gridRef.current.api.getFocusedCell();
             console.log(selected)
@@ -240,7 +247,7 @@ function App() {
           Delete Course
         </button>
         <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-4"
+          className="btn btn-primary"
           onClick={() => {
             const res = exportToCSV(data);
             const udat = encodeURIComponent(res);
@@ -261,15 +268,22 @@ function App() {
             setGlobGPA(calcGPA(dat));
             tg.start();
           }}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-4"
+          className="btn btn-primary"
         >
           <AcademicCapIcon className="w-5 h-5 inline-block mr-2"/>
           Tutorial
         </button>
         <br/>
-        <a id="aboutpage" className="text-blue-600 underline" href="https://github.com/JettChenT/GPA/blob/main/README.md">About this tool</a>
-        {" "}
-        <a className="text-blue-600 underline" href="https://www.bilibili.com/video/BV1L44y1U74Q/">Demo</a>
+        
+        <div className="footer p-3 mt-5 footer-center text-base-content bg-base-200 rounded">
+          <div className="grid grid-flow-col gap-3">
+            <a id="aboutpage" className="link link-hover" href="https://github.com/JettChenT/GPA/blob/main/README.md">About</a>
+            {" "}
+            <a className="link link-hover" href="https://www.bilibili.com/video/BV1L44y1U74Q/">Demo</a>
+            {" "}
+            <MobilePopup/>
+          </div>
+        </div>
       </div>
     </div>
   );
